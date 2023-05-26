@@ -63,12 +63,12 @@
                 <div>{$theme.description}</div>
                 <div><code>/theme/{$theme.name}</code> </div>
                 <div class="d-flex gap-2">
-                    {if $config->get('theme.name', '') == $theme['name']}
+                    {if in_array($theme['name'], $config->get('theme', []))}
                     <button class="btn btn-sm btn-danger" type="button" onclick="change('{$theme.name}');" data-bs-toggle="tooltip" data-bs-placement="right" title="点击停用该主题">使用中</button>
                     {else}
                     <button class="btn btn-sm btn-primary" type="button" onclick="change('{$theme.name}');" data-bs-toggle="tooltip" data-bs-placement="right" title="点击使用该主题">使用该主题</button>
-                    {/if}
                     <button class="btn btn-sm btn-warning" type="button" onclick="del('{$theme.name}');" data-bs-toggle="tooltip" data-bs-placement="right" title="删除该主题">删除</button>
+                    {/if}
                 </div>
             </div>
         </div>

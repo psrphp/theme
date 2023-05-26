@@ -23,7 +23,13 @@ class Change extends Common
         }
 
         $theme = $config->get('theme', []);
-        $theme['name'] = $name == $theme['name'] ? '' : $name;
+
+        $key = array_search($name, $theme);
+        if ($key === false) {
+            $theme[] = $name;
+        } else {
+            unset($theme[$key]);
+        }
 
         $config->save('theme', $theme);
 

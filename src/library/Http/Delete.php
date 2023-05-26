@@ -26,10 +26,14 @@ class Delete extends Common
         }
 
         $root = dirname(dirname(dirname((new ReflectionClass(InstalledVersions::class))->getFileName())));
-
         $dir->del($root . '/theme/' . $name);
 
-        $config->set('theme', []);
+        $theme = $config->get('theme', []);
+        $key = array_search($name, $theme);
+        if ($key !== false) {
+            unset($theme[$key]);
+        }
+        $config->save('theme', $theme);
 
         return Response::success('操作成功！');
     }
