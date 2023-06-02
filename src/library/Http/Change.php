@@ -31,7 +31,7 @@ class Change extends Common
             unset($theme[$key]);
         }
 
-        $config->save('theme', $theme);
+        $config->save('theme', array_values($theme));
 
         return Response::success('操作成功！');
     }
