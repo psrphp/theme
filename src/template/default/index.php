@@ -91,7 +91,7 @@
         <div class="h1">主题管理</div>
         <div class="text-muted fw-light">
             <span>主题位于 <code>/theme</code> 目录</span>
-            <span>，开发者请阅读<a href="https://github.com/psrphp" target="_blank" class="mx-1">[https://github.com/psrphp]</a>.</span>
+            <span>，开发者请阅读<a href="https://github.com/psrphp/theme" target="_blank" class="mx-1">[https://github.com/psrphp/theme]</a>.</span>
         </div>
     </div>
     <div class="my-4">
@@ -105,7 +105,7 @@
                     <img src="{echo $theme['thumb']}" class="img-thumbnail" width="130" alt="">
                 </div>
                 <div class="d-flex flex-column gap-2 flex-grow-1 bg-light p-3">
-                    <div><span class="fs-6 fw-bold">{$theme['title']?:'-'}</span><sup class="ms-1 text-secondary">{$theme['version']??''}</sup></div>
+                    <div><span class="fs-6 fw-bold">{$theme['title']??'-'}</span><sup class="ms-1 text-secondary">{$theme['version']??''}</sup></div>
                     <div>{$theme['description']??''}</div>
                     <div><code>/theme/{$theme['name']}</code> </div>
                     <div class="d-flex gap-2">
