@@ -8,12 +8,14 @@ use App\Psrphp\Admin\Http\Common;
 use App\Psrphp\Admin\Lib\Response;
 use PsrPHP\Request\Request;
 use PsrPHP\Framework\Config;
+use PsrPHP\Router\Router;
 
 class Up extends Common
 {
     public function post(
+        Config $config,
+        Router $router,
         Request $request,
-        Config $config
     ) {
         $name = $request->post('name');
 
@@ -32,6 +34,6 @@ class Up extends Common
         $theme[$key] = $tmp;
         $config->save('theme', array_values($theme));
 
-        return Response::success('操作成功！');
+        return Response::redirect($router->build('/psrphp/theme/index'));
     }
 }
