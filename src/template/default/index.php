@@ -1,120 +1,43 @@
 {include common/header@psrphp/admin}
-<script>
-    function change(name) {
-        $.ajax({
-            type: "POST",
-            url: "{echo $router->build('/psrphp/theme/change')}",
-            data: {
-                name: name
-            },
-            dataType: "JSON",
-            success: function(response) {
-                if (response.errcode) {
-                    alert(response.message);
-                } else {
-                    location.reload();
-                }
-            },
-            error: function() {
-                alert('发生错误~');
-            }
-        });
-    }
+<h1>主题管理</h1>
 
-    function up(name) {
-        $.ajax({
-            type: "POST",
-            url: "{echo $router->build('/psrphp/theme/up')}",
-            data: {
-                name: name
-            },
-            dataType: "JSON",
-            success: function(response) {
-                if (response.errcode) {
-                    alert(response.message);
-                } else {
-                    location.reload();
-                }
-            },
-            error: function() {
-                alert('发生错误~');
-            }
-        });
-    }
+<div>
+    <span>主题位于 <code>/theme</code> 目录</span>
+</div>
 
-    function down(name) {
-        $.ajax({
-            type: "POST",
-            url: "{echo $router->build('/psrphp/theme/down')}",
-            data: {
-                name: name
-            },
-            dataType: "JSON",
-            success: function(response) {
-                if (response.errcode) {
-                    alert(response.message);
-                } else {
-                    location.reload();
-                }
-            },
-            error: function() {
-                alert('发生错误~');
-            }
-        });
-    }
-
-    function del(name) {
-        if (confirm('确定删除该主题吗？删除后无法恢复！')) {
-            $.ajax({
-                type: "POST",
-                url: "{echo $router->build('/psrphp/theme/delete')}",
-                data: {
-                    name: name
-                },
-                dataType: "JSON",
-                success: function(response) {
-                    if (response.errcode) {
-                        alert(response.message);
-                    } else {
-                        location.reload();
-                    }
-                },
-                error: function() {
-                    alert('发生错误~');
-                }
-            });
-        }
-    }
-</script>
-<div class="container">
-    <div class="my-4">
-        <div class="h1">主题管理</div>
-        <div class="text-muted fw-light">
-            <span>主题位于 <code>/theme</code> 目录</span>
-            <span>，开发者请阅读<a href="https://github.com/psrphp/theme" target="_blank" class="mx-1">[https://github.com/psrphp/theme]</a>.</span>
-        </div>
-    </div>
-    <div class="my-4">
-        <div class="fs-4 mb-3">已启用</div>
-        <div class="d-flex flex-column gap-4">
+<div style="display: flex;flex-direction: column;gap: 20px;margin-top: 20px;">
+    <fieldset>
+        <legend>已启用</legend>
+        <div style="display: flex;flex-direction: row;flex-wrap: wrap;gap: 10px;">
             {foreach $config->get('theme', []) as $k => $vo}
             {if isset($themes[$vo])}
             {php $theme = $themes[$vo]}
-            <div class="d-flex gap-3">
+            <div>
                 <div>
-                    <img src="{echo $theme['thumb']}" class="img-thumbnail" width="130" alt="">
+                    <img src="{echo $theme['thumb']}" width="130" alt="">
                 </div>
-                <div class="d-flex flex-column gap-2 flex-grow-1 bg-light p-3">
-                    <div><span class="fs-6 fw-bold">{$theme['title']??'-'}</span><sup class="ms-1 text-secondary">{$theme['version']??''}</sup></div>
+                <div>
+                    <div>
+                        <span>{$theme['title']??'-'}</span><sup>{$theme['version']??''}</sup>
+                    </div>
                     <div>{$theme['description']??''}</div>
-                    <div><code>/theme/{$theme['name']}</code> </div>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="change('{$theme.name}');" data-bs-toggle="tooltip" data-bs-placement="right" title="点击停用该主题">使用中</button>
+                    <div><code>/theme/{$theme['name']}</code></div>
+                    <div style="display: flex;flex-direction: row;gap: 5px;">
+                        <form action="{echo $router->build('/psrphp/theme/change')}" method="post">
+                            <input type="hidden" name="name" value="{$theme.name}">
+                            <button type="submit">停用该主题</button>
+                        </form>
                         {if $k}
-                        <button class="btn btn-sm btn-danger" type="button" onclick="up('{$theme.name}');" data-bs-toggle="tooltip" data-bs-placement="right" title="点击停用该主题">上移</button>
+                        <form action="{echo $router->build('/psrphp/theme/up')}" method="post">
+                            <input type="hidden" name="name" value="{$theme.name}">
+                            <button type="submit">左移</button>
+                        </form>
                         {/if}
                         {if $k+1 != count($config->get('theme', []))}
-                        <button class="btn btn-sm btn-danger" type="button" onclick="down('{$theme.name}');" data-bs-toggle="tooltip" data-bs-placement="right" title="点击停用该主题">下移</button>
+                        <form action="{echo $router->build('/psrphp/theme/down')}" method="post">
+                            <input type="hidden" name="name" value="{$theme.name}">
+                            <button type="submit">右移</button>
+                        </form>
                         {/if}
                     </div>
                 </div>
@@ -122,29 +45,36 @@
             {/if}
             {/foreach}
         </div>
-    </div>
-    <div class="my-4">
-        <div class="fs-4 mb-3">未启用</div>
-        <div class="d-flex flex-column gap-4">
+    </fieldset>
+
+    <fieldset>
+        <legend>未启用</legend>
+        <div style="display: flex;flex-direction: row;flex-wrap: wrap;gap: 10px;">
             {foreach $themes as $theme}
             {if !in_array($theme['name'], $config->get('theme', []))}
-            <div class="d-flex gap-3">
+            <div>
                 <div>
-                    <img src="{echo $theme['thumb']}" class="img-thumbnail" width="130" alt="">
+                    <img src="{echo $theme['thumb']}" width="130" alt="">
                 </div>
-                <div class="d-flex flex-column gap-2 flex-grow-1 bg-light p-3">
-                    <div><span class="fs-6 fw-bold">{$theme['title']??'-'}</span><sup class="ms-1 text-secondary">{$theme['version']??''}</sup></div>
+                <div>
+                    <div><span>{$theme['title']??'-'}</span><sup>{$theme['version']??''}</sup></div>
                     <div>{$theme['description']??''}</div>
                     <div><code>/theme/{$theme.name}</code> </div>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-primary" type="button" onclick="change('{$theme.name}');" data-bs-toggle="tooltip" data-bs-placement="right" title="点击使用该主题">使用该主题</button>
-                        <button class="btn btn-sm btn-warning" type="button" onclick="del('{$theme.name}');" data-bs-toggle="tooltip" data-bs-placement="right" title="删除该主题">删除</button>
+                    <div style="display: flex;flex-direction: row;gap: 5px;">
+                        <form action="{echo $router->build('/psrphp/theme/change')}" method="post">
+                            <input type="hidden" name="name" value="{$theme.name}">
+                            <button type="submit">使用该主题</button>
+                        </form>
+                        <form action="{echo $router->build('/psrphp/theme/delete')}" method="post">
+                            <input type="hidden" name="name" value="{$theme.name}">
+                            <button type="submit" onclick="return confirm('确定删除吗？')">删除该主题</button>
+                        </form>
                     </div>
                 </div>
             </div>
             {/if}
             {/foreach}
         </div>
-    </div>
+    </fieldset>
 </div>
 {include common/footer@psrphp/admin}
