@@ -27,7 +27,7 @@ class ListenerProvider implements ListenerProviderInterface
                         Config $config,
                         Template $template,
                     ): Template {
-                        $root = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__DIR__)))))));
+                        $root = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
                         foreach ($config->get('theme', []) as $key => $name) {
                             foreach ($app->all() as $vo) {
                                 $template->addPath($vo['name'], $root . '/theme/' . $name . '/' . $vo['name'], 99 - $key);

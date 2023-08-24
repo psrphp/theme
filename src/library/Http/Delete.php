@@ -22,7 +22,7 @@ class Delete extends Common
             return Response::error('参数错误！');
         }
 
-        $root = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__DIR__)))))));
+        $root = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
         Dir::del($root . '/theme/' . $name);
 
         $theme = $config->get('theme', []);

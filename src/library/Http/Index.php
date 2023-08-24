@@ -13,7 +13,7 @@ class Index extends Common
         Template $template
     ) {
         $themes = [];
-        $root = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__DIR__)))))));
+        $root = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
         foreach (glob($root . '/theme/*/config.json') as $file) {
             $name = substr($file, strlen($root . '/theme/'), -strlen('/config.json'));
             $json = file_exists($file) ? json_decode(file_get_contents($file), true) : [];
